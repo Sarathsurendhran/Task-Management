@@ -8,7 +8,6 @@ from .serializers import TaskSerializer
 
 @receiver(post_save, sender=Task)
 def task_saved(sender, instance, created, **kwargs):
-    print(f"Task saved: {instance}")
     channel_layer = get_channel_layer()
     data = TaskSerializer(instance).data
     action = "create" if created else "update"

@@ -16,6 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"confirm_password": "Passwords do not match."}
             )
+
         return attrs
 
     def create(self, validated_data):
@@ -33,3 +34,9 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = ["id", "title", "description", "completed", "created_at", "updated_at"]
         read_only_fields = ["id", "created_at", "updated_at"]
+
+    def validate_title(self, value):
+        user = self.context['request'].user
+        if Task.objects.filter(title=value, user=user).exists():
+            raise serializers.ValidationError("A task with this title already exists.")
+        return value

@@ -10,20 +10,52 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [confirm_password, setconfirm_password] = useState("");
+  const [confirm_password, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 8; 
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    
+    if (!username || !email || !password || !confirm_password) {
+      toast.error("All fields are required.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Invalid email format.");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      toast.error("Password must be at least 8 characters long.");
+      return;
+    }
+
     if (password !== confirm_password) {
       toast.error("Passwords don't match");
       return;
     }
+
     try {
       setLoading(true);
-      await axiosInstance.post("register/", { username, email, password, confirm_password});
+      await axiosInstance.post("register/", {
+        username,
+        email,
+        password,
+        confirm_password,
+      });
       toast.success("Registration successful! Please login.");
       setError(null);
       navigate("/login");
@@ -61,8 +93,6 @@ const Register = () => {
           {error && <p className="text-red-500 text-center">{error}</p>}
 
           <div className="rounded-md shadow-sm space-y-4">
-            {" "}
-            {/* Added space-y-4 */}
             <div>
               <label htmlFor="username" className="sr-only">
                 Username
@@ -120,7 +150,7 @@ const Register = () => {
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Confirm Password"
                 value={confirm_password}
-                onChange={(e) => setconfirm_password(e.target.value)}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
           </div>

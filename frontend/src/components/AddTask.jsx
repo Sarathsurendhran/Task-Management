@@ -19,7 +19,7 @@ const AddTask = () => {
         toast.success('Task added successfully!');
       })
       .catch((error) => {
-        toast.error('Failed to add task!');
+       console.log("error")
       });
       
     }

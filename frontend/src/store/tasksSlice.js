@@ -47,7 +47,8 @@ const tasksSlice = createSlice({
       switch (wsAction) {
         case "create":
           console.log("Creating new task:", task);
-          state.items.push(task);
+          // state.items.push(task);
+          state.items.unshift(task);
           break;
         case "update":
           console.log("Updating task:", task);
