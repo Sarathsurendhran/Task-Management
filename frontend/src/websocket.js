@@ -11,7 +11,9 @@ export const connectWebSocket = (token) => {
     socket.close();
   }
 
-  const wsUrl = `ws://127.0.0.1:8001/ws/tasks/?token=${token}`;
+  const wsUrl = `${import.meta.env.VITE_WS_URL}${token}`;
+
+  // const wsUrl = `ws://127.0.0.1:8001/ws/tasks/?token=${token}`;
 
   console.log("Attempting to connect WebSocket at:");
 
